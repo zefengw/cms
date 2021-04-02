@@ -1,0 +1,4 @@
+.pager li .active_link {
+    /* Define Function*/
+    background: #000 !important;
+}

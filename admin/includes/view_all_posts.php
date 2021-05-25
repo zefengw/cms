@@ -61,10 +61,10 @@
 
         <thead>
             <tr>
-                <th><input type="checkbox" onClick="toggle(this)"></th>
+                <th><input type="checkbox" id="selectAllBoxes"></th>
 
                 <th>Id</th>
-                <th>Author</th>
+                <th>Users</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Status</th>
@@ -75,6 +75,7 @@
                 <th>View</th>
                 <th>Edit</th>
                 <th>Delete</th>
+                <th>Views</th>
             </tr>
         </thead>
         <tbody>
@@ -85,6 +86,7 @@
             while($row = mysqli_fetch_assoc($select_posts)){
             $post_id =$row['post_id'];
             $post_author =$row['post_author'];
+            $post_user =$row['post_user'];
             $post_title =$row['post_title'];
             $post_cat_id =$row['post_category_id'];
             $post_status =$row['post_status'];
@@ -95,10 +97,18 @@
             $post_views_count =$row['post_views_count'];
             echo "<tr>";
             ?>
-                <td><input type='checkbox' name='checkBoxArray[]' value="<?php echo $post_id;?>"></td>;
+                <td><input class="checkBoxes" type='checkbox' name='checkBoxArray[]' value="<?php echo $post_id;?>"></td>;
             <?php
             echo "<td>{$post_id}</td>";
-            echo "<td>{$post_author}</td>";
+            if(!empty($post_author)){
+                echo "<td>{$post_author}</td>";
+            }elseif(!empty($post_user)){
+                echo "<td>{$post_user}</td>";
+            }
+
+
+
+
             echo "<td>{$post_title}</td>";
 
             $query = "SELECT * FROM category WHERE cat_id = {$post_cat_id} ";
@@ -113,7 +123,13 @@
             echo "<td>{$post_status}</td>";
             echo "<td><img src='../images/$post_image' alt='image' width='100'></td>";
             echo "<td>{$post_tags}</td>";
-            echo "<td>{$post_comment_count}</td>";
+
+            $query = "SELECT * FROM comments WHERE comment_post_id = $post_id";
+            $send_comment_query = mysqli_query($connection, $query);
+            $row = mysqli_fetch_array($send_comment_query);
+            $count_comments = mysqli_num_rows($send_comment_query);
+            echo "<td><a href='post_comments.php?id=$post_id'>$count_comments</a></td>";
+
             echo "<td>{$post_date}</td>";
             echo "<td><a href='../post.php?p_id={$post_id}'>View Post</a></td>";
             echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";

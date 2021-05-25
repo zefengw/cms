@@ -31,20 +31,20 @@ include "admin/functions.php";
             $email = mysqli_real_escape_string($connection, $email);
             $password = mysqli_real_escape_string($connection, $password);
 
+            $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12) );
 
+            // $query = "SELECT randSalt FROM users";
+            // $select_randsalt_query = mysqli_query($connection, $query);
 
-            $query = "SELECT randSalt FROM users";
-            $select_randsalt_query = mysqli_query($connection, $query);
+            // confirm($select_randsalt_query);
 
-            confirm($select_randsalt_query);
+            // $row = mysqli_fetch_assoc($select_randsalt_query);
+            // $salt = $row['randSalt'];
 
-            $row = mysqli_fetch_assoc($select_randsalt_query);
-            $salt = $row['randSalt'];
-
-            $hash_password = crypt($password, $salt);
+            // $hash_password = crypt($password, $salt);
 
             $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
-            $query .= "VALUES('{$username}', '{$email}', '{$hash_password}', 'subscriber' )";
+            $query .= "VALUES('{$username}', '{$email}', '{$password}', 'subscriber' )";
             $register_user_query = mysqli_query($connection, $query);
 
             confirm($register_user_query);

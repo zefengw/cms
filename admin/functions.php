@@ -25,6 +25,9 @@
     }
     users_online();
 
+    function redirect($location){
+        return header("Location: " . $location);
+    }
 
     function escape($string){
         global $connection;
@@ -82,4 +85,95 @@
             header("Location: categories.php");
         }
     }
+
+function recordCount($table){
+    global $connection;
+    $query = "SELECT * FROM " . $table;
+    $select_all_post = mysqli_query($connection, $query);
+    confirm($select_all_post);
+    return mysqli_num_rows($select_all_post);
+
+}
+
+function checkStatus($table, $column, $status){
+    global $connection;
+    $query = "SELECT * FROM $table WHERE $column = '$status' ";
+    $result = mysqli_query($connection, $query);
+    return mysqli_num_rows($result);
+}
+
+function checkUserRole($table, $column, $role){
+    global $connection;
+    $query = "SELECT * FROM $table WHERE $column = '$role' ";
+    $result = mysqli_query($connection, $query);
+    return mysqli_num_rows($result);
+
+}
+//Unecessary defaul value
+function is_admin($username = ''){
+    global $connection;
+    $query = "SELECT user_role FROM users WHERE username ='$username' ";
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+    $row = mysqli_fetch_array($result);
+    return $row['user_role'] == 'admin';
+}
+
+function username_exists($username){
+    global $connection;
+    $query = "SELECT username FROM users WHERE username ='$username' ";
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+    return mysqli_num_rows($result) > 0;
+}
+function email_exists($email){
+    global $connection;
+    $query = "SELECT user_email FROM users WHERE user_email ='$email' ";
+    $result = mysqli_query($connection, $query);
+    confirm($result);
+    return mysqli_num_rows($result) > 0;
+}
+function register_user($username, $email, $password){
+    global $connection;
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    if(username_exists($username)){
+        $message = "User Already Exists";
+    }elseif(email_exists($email)){
+        $message = "Email Already Exists";
+    }else{
+
+        if(!empty($username) && !empty($email) && !empty($password)){
+
+            $username = mysqli_real_escape_string($connection, $username);
+            $email = mysqli_real_escape_string($connection, $email);
+            $password = mysqli_real_escape_string($connection, $password);
+
+            $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12) );
+
+            // $query = "SELECT randSalt FROM users";
+            // $select_randsalt_query = mysqli_query($connection, $query);
+
+            // confirm($select_randsalt_query);
+
+            // $row = mysqli_fetch_assoc($select_randsalt_query);
+            // $salt = $row['randSalt'];
+
+            // $hash_password = crypt($password, $salt);
+
+            $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
+            $query .= "VALUES('{$username}', '{$email}', '{$password}', 'subscriber' )";
+            $register_user_query = mysqli_query($connection, $query);
+
+            confirm($register_user_query);
+
+            $message = "Your Registration has been submitted";
+        }else{
+            $message = "Fields cannot be empty";
+        }
+    }
+}
+
 ?>

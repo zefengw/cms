@@ -1,6 +1,10 @@
 
 <?php include "includes/admin_header.php";
     include "../includes/db.php"; //dot dot operator means another folder
+    if(!is_admin($_SESSION['username'])){
+        header("Location: index.php");
+    }
+
 ?>
 <body>
     <div id="wrapper">

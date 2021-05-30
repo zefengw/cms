@@ -1,6 +1,9 @@
 
 <?php include "includes/admin_header.php";
     include "../includes/db.php"; //dot dot operator means another folder
+    if(!is_admin($_SESSION['username'])){
+        header("Location: index.php");
+    }
     if(isset($_SESSION['username'])){
         $username = $_SESSION['username'];
         $query = "SELECT * FROM users WHERE username = '{$username}' ";

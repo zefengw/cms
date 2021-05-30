@@ -28,10 +28,17 @@
             }else{
                 $page_1 = ($page * $per_page) - $per_page;
             }
-                    $post_query_count = "SELECT * FROM posts";
+            if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
+                $post_query_count = "SELECT * FROM posts ";
+            }else{
+                $post_query_count = "SELECT * FROM posts WHERE post_status = 'published' ";
+            }
+                    $post_query_count = "SELECT * FROM posts WHERE post_status = 'published' ";
                     $find_count = mysqli_query($connection, $post_query_count);
                     $count = mysqli_num_rows($find_count);
-
+                    if($count == 0){
+                        echo "<h1 class='text-center'>No Available Posts</h1>";
+                    }else{
                     $count = ceil($count / $per_page);
 
                   $query = "SELECT * FROM posts WHERE post_status = 'published' LIMIT $page_1, $per_page ";
@@ -46,7 +53,6 @@
                       $post_content =substr($row['post_content'], 0, 100);
                       $post_status =$row['post_status'];
 
-                      if($post_status == 'published'){
 
                     ?>
                 <h1><?php echo $count; ?></h1>

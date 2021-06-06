@@ -1,7 +1,7 @@
 <?php  include "includes/db.php"; ?>
- <?php  include "includes/header.php"; ?>
+<?php  include "includes/header.php"; ?>
+
 <?php
-include "admin/functions.php";
 //Setting Language Variables
     if(isset($_GET['lang']) && !empty($_GET['lang'])){
 
@@ -20,7 +20,7 @@ include "admin/functions.php";
 
 
 
-    if(isset($_POST['submit'])){
+    if($_SERVER['REQUEST_METHOD'] == "POST"){
         //Trim removes whitespace
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
@@ -37,7 +37,7 @@ include "admin/functions.php";
         if(empty($username)){
             $error['username'] = 'Username cannot be empty';
         }
-        if(username_exists($username))){
+        if(username_exists($username)){
             $error['username'] = 'Username already exists, please choose another';
         }
         if(empty($email)){
@@ -49,8 +49,16 @@ include "admin/functions.php";
         if(empty($password)){
             $error['password'] = "Password cannot be empty";
         }
-    }else{
-        $message = "";
+
+        foreach($error as $key => $value){
+            if(empty($value)){
+                unset($error[$key]);
+            }
+        }
+        if(empty($error)){
+            register_user($username, $email, $password);
+            login_user($username, $password);
+        }
     }
 
 ?>
@@ -79,21 +87,27 @@ include "admin/functions.php";
                 <div class="form-wrap">
                 <h1><?php echo _REGISTER;?></h1>
                     <form role="form" action="registration.php" method="post" id="login-form" autocomplete="off">
-                    <h6 class="text-center"><?php echo $message;?></h6>
                         <div class="form-group">
                             <label for="username" class="sr-only">username</label>
-                            <input type="text" name="username" id="username" class="form-control" placeholder="<?php echo _USERNAME;?>">
+                            <input type="text" name="username" id="username" class="form-control" placeholder="<?php echo _USERNAME;?>"
+                            autocomplete="on"
+                            value="<?php echo isset($username) ? $username : ''; ?>">
+                            <p><?php echo isset($error['username']) ? $error['username'] : '';?></p>
                         </div>
                          <div class="form-group">
                             <label for="email" class="sr-only">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="<?php echo _EMAIL;?>">
+                            <input type="email" name="email" id="email" class="form-control" placeholder="<?php echo _EMAIL;?>"
+                            autocomplete="on"
+                            value="<?php echo isset($email) ? $email : ''; ?>">
+                            <p><?php echo isset($error['email']) ? $error['email'] : '';?></p>
                         </div>
                          <div class="form-group">
                             <label for="password" class="sr-only">Password</label>
                             <input type="password" name="password" id="key" class="form-control" placeholder="<?php echo _PASSWORD;?>">
+                            <p><?php echo isset($error['password']) ? $error['password'] : '';?></p>
                         </div>
 
-                        <input type="submit" name="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="<?php echo _REGISTER;?>">
+                        <input type="submit" name="register" id="btn-login" class="btn btn-custom btn-lg btn-block" value="<?php echo _REGISTER;?>">
                     </form>
 
                 </div>

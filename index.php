@@ -16,7 +16,7 @@
             <div class="col-md-8">
 
             <?php
-            $per_page = 2;
+            $per_page = 5;
             if(isset($_GET['page'])){
                 $page = $_GET['page'];
             }else{
@@ -53,13 +53,11 @@
                       $post_content =substr($row['post_content'], 0, 100);
                       $post_status =$row['post_status'];
 
-
                     ?>
-                <h1><?php echo $count; ?></h1>
 
                 <!-- First Blog Post -->
                 <h2>
-                    <a href="post.php?p_id=<?php echo $post_id;?>"><?php echo $post_title?></a>
+                    <a href="post/<?php echo $post_id;?>"><?php echo $post_title?></a>
                 </h2>
                 <p class="lead">
                     by <a href="author_posts.php?author=<?php echo $post_user?>&p_id=<?php echo $post_id;?>"><?php echo $post_user?></a>

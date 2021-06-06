@@ -1,7 +1,6 @@
 <?php  include "includes/db.php"; ?>
  <?php  include "includes/header.php"; ?>
 <?php
-include "admin/functions.php";
 //Setting Language Variables
     if(isset($_GET['lang']) && !empty($_GET['lang'])){
 
@@ -20,22 +19,22 @@ include "admin/functions.php";
 
 
     // the message
-    $msg = "First line of text\nSecond line of text";
+    // $msg = "First line of text\nSecond line of text";
 
     // use wordwrap() if lines are longer than 70 characters
-    $msg = wordwrap($msg,70);
+    // $msg = wordwrap($msg,70);
 
     // send email
-    mail("ze.feng.wang@ocsbstudent.ca","My subject",$msg);
+    // mail("ze.feng.wang@ocsbstudent.ca","My subject",$msg);
 
 
-    if(isset($_POST['submit'])){
-        $to = "ze.feng.wang@ocsbstudent.ca";
-        $subject = $_POST['subject'];
-        $body = $_POST['body'];
+    // if(isset($_POST['submit'])){
+    //     $to = "ze.feng.wang@ocsbstudent.ca";
+    //     $subject = $_POST['subject'];
+    //     $body = $_POST['body'];
 
 
-    }
+    // }
 
 ?>
 

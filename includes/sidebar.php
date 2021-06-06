@@ -1,3 +1,13 @@
+<?php
+    if(ifItIsMethod('post')){
+        if(isset($_POST['username']) && isset($_POST['password'])){
+            login_user($_POST['username'], $_POST['password']);
+        }else{
+            redirect('index');
+        }
+    }
+
+?>
 <div class="col-md-4">
                 <!-- Blog Search Well -->
                 <div class="well">
@@ -22,7 +32,7 @@
                 <a href="includes/logout.php" class="btn btn-primary">Logout</a>
             <?php else: ?>
                 <h4>Login</h4>
-                    <form action="includes/login.php" method="post">
+                    <form  method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" name="username" placeholder="Enter Username">
 
@@ -34,7 +44,9 @@
                         </span>
 
                     </div>
-
+                    <div class="form-group">
+                        <a href="forgot_password.php?forgot=<?php echo uniqid(true);?>">Forgot Password</a>
+                    </div>
                     </form> <!-- Search Form-->
                     <!-- /.input-group -->
             <?php endif;?>
@@ -44,7 +56,7 @@
                 <!-- Blog Categories Well -->
                 <div class="well">
                     <?php
-                        $query = "SELECT * FROM category LIMIT 4";
+                        $query = "SELECT * FROM category";
                         $select_categories_sidebar = mysqli_query($connection, $query);
 
                     ?>

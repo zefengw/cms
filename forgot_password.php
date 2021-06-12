@@ -1,8 +1,15 @@
+<?php use PHPMailer\PHPMailer\PHPMailer;?>
 <?php  include "includes/db.php"; ?>
 <?php  include "includes/header.php"; ?>
 <?php
 
-if(!ifItIsMethod('get') && !isset($_GET['forgot'])){
+require './vendor/autoload.php';
+//Composer.json maps the config class
+// require './classes/Config.php';
+
+// echo get_class($mail);
+
+if(!isset($_GET['forgot'])){
     redirect('index');
 }
 if(ifItIsMethod('post')){
@@ -15,6 +22,32 @@ if(ifItIsMethod('post')){
                 mysqli_stmt_bind_param($stmt, "s", $email);
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
+                /*
+                Configure PHPMailer
+                */
+                $mail = new PHPMailer();
+                // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                $mail->isSMTP();
+                $mail->Host       = Config::SMTP_HOST;
+                $mail->Username   = Config::SMTP_USER;
+                $mail->Password   = Config::SMTP_PASS;
+                $mail->Port       = Config::SMTP_PORT;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->SMTPAuth = true;
+                //Character type that supports other languages
+                $mail->CharSet = "UTF-8";
+                //Allows to use html code when sending emails
+                $mail->isHTML(true);
+                $mail->setFrom('ze.feng.wang@ocsbstudent.ca', 'Zefeng Wang');
+                $mail->addAddress($email);
+                $mail->Subject='This is a test email';
+                $mail->Body = '<p>Please click to reset your password
+                <a href="http://localhost/cms/reset.php?email='. $email.'&token=' . $token. ' ">http://localhost/cms/reset.php?email='. $email.'&token=' . $token. '</a></p>';
+                if($mail->send()){
+                    $emailSent = true;
+                }else{
+                    echo "Not sent";
+                }
             }
         }
     }
@@ -31,6 +64,7 @@ if(ifItIsMethod('post')){
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="text-center">
+                        <?php if(!isset($emailSent)):?>
 
 
                                 <h3><i class="fa fa-lock fa-4x"></i></h3>
@@ -57,6 +91,9 @@ if(ifItIsMethod('post')){
                                     </form>
 
                                 </div><!-- Body-->
+                                <?php else:?>
+                                    <h2>Please check your email</h2>
+                                <?php endif;?>
 
                         </div>
                     </div>

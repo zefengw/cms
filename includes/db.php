@@ -14,4 +14,7 @@ ob_start();
     //     echo "Connected";
     // }
 
+    $query = "SET NAMES utf8";
+    mysqli_query($connection, $query);
+
 ?>

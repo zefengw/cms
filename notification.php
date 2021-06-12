@@ -12,6 +12,6 @@
     $options
   );
 
-  $data['message'] = 'hello world';
-  $pusher->trigger('my-channel', 'my-event', $data);
+  $data['message'] = 'Yo';
+  $pusher->trigger('channel-1', 'event-1', $data);
 ?>

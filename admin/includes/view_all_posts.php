@@ -82,15 +82,17 @@ include "delete_modal.php";
         </thead>
         <tbody>
         <?php
+            $user = currentUser();
+
             //table.column_name: Use one query instead of multiple
             //Selecting all columns from two tables
             $query = "SELECT posts.post_id, posts.post_author, posts.post_user, posts.post_title, posts.post_category_id, posts.post_status, posts.post_image, ";
             $query .= "posts.post_tags, posts.post_comment_count, posts.post_date, posts.post_views_count, category.cat_id, category.cat_title ";
-            //Main table: posts, and left join it with the category table where the two columns data are the same
-            $query .= "FROM posts LEFT JOIN category ON posts.post_category_id = category.cat_id ORDER BY posts.post_id DESC";
+            //Main table: posts that were created by the user, and left join it with the category table where the two columns data are the same
+            $query .= "FROM posts LEFT JOIN category ON posts.post_category_id = category.cat_id WHERE posts.post_user='{$user}' ORDER BY posts.post_id DESC";
             $select_posts = mysqli_query($connection, $query);
 
-            while($row = mysqli_fetch_assoc($select_posts)){
+            while($row = mysqli_fetch_array($select_posts)){
             $post_id =$row['post_id'];
             $post_author =$row['post_author'];
             $post_user =$row['post_user'];

@@ -1,8 +1,11 @@
 <?php  include "includes/db.php"; ?>
 <?php  include "includes/header.php"; ?>
+<!-- Navigation -->
+
+<?php  include "includes/navigation.php"; ?>
+
 
 <?php
-session_start();
     checkIfUserIsLoggedInAndRedirect('/cms/admin');
     if(ifItIsMethod('post')){
         if(isset($_POST['username']) && isset($_POST['password'])){
@@ -13,10 +16,6 @@ session_start();
     }
 ?>
 
-
-<!-- Navigation -->
-
-<?php  include "includes/navigation.php"; ?>
 
 
 <!-- Page Content -->

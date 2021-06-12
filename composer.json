@@ -1,7 +1,13 @@
 {
     "name": "zefen/cms",
     "require": {
-        "phpmailer/phpmailer": "^6.4"
+        "phpmailer/phpmailer": "^6.4",
+        "pusher/pusher-php-server": "^7.0"
+    },
+    "autoload": {
+        "classmap": [
+            "classes"
+        ]
     },
     "authors": [
         {

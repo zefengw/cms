@@ -199,8 +199,16 @@ function ifItIsMethod($method=null){
     return $_SERVER['REQUEST_METHOD'] == strtoupper($method);
 }
 
+function currentUser(){
+    return isset($_SESSION['username']) ? $_SESSION['username'] : false;
+}
+
 function isLoggedIn(){
     return isset($_SESSION['user_role']);
+}
+
+function imagePlaceholder($image=''){
+    return !$image ? "屏幕截图(24).png" : $image;
 }
 
 function checkIfUserIsLoggedInAndRedirect($redirectLocation){

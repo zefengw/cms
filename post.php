@@ -6,6 +6,48 @@
     <!-- Navigation -->
     <?php include "includes/navigation.php"; ?>
 
+    <?php
+        if(isset($_POST['liked'])){
+            $post_id = $_POST['post_id'];
+            $user_id = $_POST['user_id'];
+            //Fetching the correct post
+            $query = "SELECT * FROM posts WHERE post_id=$post_id";
+            $postQuery = mysqli_query($connection, $query);
+            $post = mysqli_fetch_array($postQuery);
+            $likes = $post['likes'];
+
+            if(mysqli_num_rows($postQuery) >= 1){
+                echo $post['post_id'];
+            }
+            //Update likes(increment)
+            mysqli_query($connection, "UPDATE posts SET likes=$likes+1 WHERE post_id=$post_id");
+            //Create likes for post
+            mysqli_query($connection, "INSERT INTO likes(user_id, post_id) VALUES($user_id, $post_id)");
+            exit();
+
+        }
+
+        if(isset($_POST['unliked'])){
+
+            $post_id = $_POST['post_id'];
+            $user_id = $_POST['user_id'];
+
+            //Fetching the correct post
+            $query = "SELECT * FROM posts WHERE post_id=$post_id";
+            $postQuery = mysqli_query($connection, $query);
+            $post = mysqli_fetch_array($postQuery);
+            $likes = $post['likes'];
+            //Delete Likes
+            mysqli_query($connection, "DELETE FROM likes WHERE post_id=$post_id AND user_id=$user_id");
+            //Update likes(decrement)
+            mysqli_query($connection, "UPDATE posts SET likes=$likes-1 WHERE post_id=$post_id");
+            //Create likes for post
+            exit();
+
+        }
+
+    ?>
+
     <!-- Page Content -->
     <div class="container">
 
@@ -54,12 +96,22 @@
                 </p>
                 <p><span class="glyphicon glyphicon-time"></span> <?php echo $post_date?></p>
                 <hr>
-                <img class="img-responsive" src="images/<?php echo imagePlaceholder($post_image);?>" alt="">
+                <img class="img-responsive" src="/cms/images/<?php echo imagePlaceholder($post_image);?>" alt="">
                 <hr>
                 <p><?php echo $post_content?></p>
                 <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
                 <hr>
+                <div class="row">
+                    <p class="pull-right"><a class="like" href="#" style="font-size: 20px"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
+                </div>
+                <div class="row">
+                    <p class="pull-right"><a class="unlike" href="#" style="font-size: 20px"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
+                </div>
+                <div class="row">
+                    <p class="pull-right">Likes: 10</p>
+                </div>
+                <div class="clearfix"></div>
                 <?php
                   }
 
@@ -165,3 +217,33 @@
         <hr>
 
     <?php include "includes/footer.php"; ?>
+<script>
+    $(document).ready(function(){
+        var post_id = <?php echo $the_post_id;?>;
+        var user_id = 106;
+        //Like
+        $(".like").click(function(){
+            $.ajax({
+                url: "/cms/post/<?php echo $the_post_id;?>",
+                type: "post",
+                data: {
+                    'liked': 1,
+                    'post_id': post_id,
+                    'user_id': user_id,
+                }
+            });
+        });
+        //Unlike
+        $(".unlike").click(function(){
+            $.ajax({
+                url: "/cms/post/<?php echo $the_post_id;?>",
+                type: "post",
+                data: {
+                    'unliked': 1,
+                    'post_id': post_id,
+                    'user_id': user_id,
+                }
+            });
+        });
+    });
+</script>

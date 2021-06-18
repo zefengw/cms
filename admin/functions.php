@@ -1,4 +1,9 @@
 <?php
+
+function query($query){
+    global $connection;
+    return mysqli_query($connection, $query);
+}
     function users_online() {
         if(isset($_GET['onlineusers'])) {
             global $connection;
@@ -208,13 +213,27 @@ function isLoggedIn(){
 }
 
 function imagePlaceholder($image=''){
-    return !$image ? "屏幕截图(24).png" : $image;
+    return !$image ? "IMG_20210227_112407.jpg" : $image;
 }
 
 function checkIfUserIsLoggedInAndRedirect($redirectLocation){
     if(isLoggedIn()){
         redirect($redirectLocation);
     }
+}
+
+function loggedInUserId(){
+    if(isLoggedIn()){
+        $result = query("SELECT * FROM users WHERE username='". $_SESSION['username'] . "'");
+        $users = mysqli_fetch_array($result);
+        return mysqli_num_rows($result) >= 1 ? $users['user_id'] : false;
+    }
+    return false;
+}
+
+function userLiked($post_id = ''){
+    $result = query("SELECT * FROM likes WHERE user_id=" . loggedInUserId() . " AND post_id={$post_id}");
+    return mysqli_num_rows($result) >= 1;
 }
 
 ?>

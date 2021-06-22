@@ -2,12 +2,12 @@
     if(ifItIsMethod('post')){
 
         if(isset($_POST['login'])){
-        if(isset($_POST['username']) && isset($_POST['password'])){
-            login_user($_POST['username'], $_POST['password']);
-        }else{
-            redirect('index');
+            if(isset($_POST['username']) && isset($_POST['password'])){
+                login_user($_POST['username'], $_POST['password']);
+            }else{
+                redirect('index');
+            }
         }
-    }
     }
 
 ?>
@@ -32,7 +32,7 @@
             <div class="well">
             <?php if(isset($_SESSION['user_role'])):?>
                 <h4>Logged in as <?php echo $_SESSION['username'];?></h4>
-                <a href="includes/logout.php" class="btn btn-primary">Logout</a>
+                <a href="/cms/includes/logout.php" class="btn btn-primary">Logout</a>
             <?php else: ?>
                 <h4>Login</h4>
                     <form  method="post">

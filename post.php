@@ -99,23 +99,35 @@
                 <img class="img-responsive" src="/cms/images/<?php echo imagePlaceholder($post_image);?>" alt="">
                 <hr>
                 <p><?php echo $post_content?></p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
 
+
+                <?php if(isLoggedIn()):?>
                 <hr>
                 <div class="row">
-                    <p class="pull-right"><a class="like" href="#" style="font-size: 20px"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
+                <!--data-toggle: initiate bootstrap data toggle
+                    data-placement: shows where the words would appear when hovering the button
+                    title: the words that will appear
+                     -->
+                    <p class="pull-right"><a class="<?php echo userLiked($the_post_id) ? 'unlike' : 'like';?>"
+                    href="" style="font-size: 20px"><span class="glyphicon glyphicon-thumbs-up"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="<?php echo userLiked($the_post_id) ? ' I liked this before' : ' Want to like?';?>"
+                    ></span><?php echo userLiked($the_post_id) ? ' Unlike' : ' Like';?>
+
+                    </a></p>
                 </div>
+                <?php else:?>
                 <div class="row">
-                    <p class="pull-right"><a class="unlike" href="#" style="font-size: 20px"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
+                    <p class="pull-right">You need to <a href="/cms/login">Login</a> to like</p>
                 </div>
+                <?php endif; ?>
+
                 <div class="row">
-                    <p class="pull-right">Likes: 10</p>
+                    <p class="pull-right likes">Likes: <?php getPostLikes($the_post_id);?></p>
                 </div>
                 <div class="clearfix"></div>
-                <?php
-                  }
-
-                      ?>
+                <?php }?>
 
 
 
@@ -198,9 +210,11 @@
 
 
 
-                        <?php } }}else{
-                                header("Location: index.php");
-                                }?>
+                        <?php }
+                        }
+                    }else{
+                        redirect("/cms/index");
+                    }?>
 
 
 
@@ -219,8 +233,11 @@
     <?php include "includes/footer.php"; ?>
 <script>
     $(document).ready(function(){
+        //Words appear when hovering over like button
+        $("[data-toggle='tooltip']").tooltip();
+
         var post_id = <?php echo $the_post_id;?>;
-        var user_id = 106;
+        var user_id = <?php echo loggedInUserId();?>;
         //Like
         $(".like").click(function(){
             $.ajax({

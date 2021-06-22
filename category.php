@@ -19,7 +19,7 @@
             #statements and post requests make your website more secure
             if(isset($_GET['category'])){
                 $post_category_id = $_GET['category'];
-                if(is_admin($_SESSION['username'])){
+                if(is_admin()){
                     #Preparing the two statements and assign them to their variable
                     $stmt1 = mysqli_prepare($connection, "SELECT post_id, post_title, post_user, post_date, post_image, post_content FROM posts WHERE post_category_id = ?");
 

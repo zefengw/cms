@@ -1,7 +1,7 @@
 
 <?php include "includes/admin_header.php";
     include "../includes/db.php"; //dot dot operator means another folder
-    if(!is_admin($_SESSION['username'])){
+    if(!is_admin()){
         header("Location: index.php");
     }
 ?>
@@ -57,7 +57,6 @@
                                 </thead>
                                 <tbody>
                                 <?php //Find All Categories Query
-
                                         findAllCategories();
                             ?>
                             <?php //Delete Query

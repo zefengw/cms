@@ -3,20 +3,28 @@
 
 <?php
 //Setting Language Variables
-    if(isset($_GET['lang']) && !empty($_GET['lang'])){
 
-        $_SESSION['lang'] = $_GET['lang'];
+if(isset($_GET['lang']) && !empty($_GET['lang'])){
+    $_SESSION['lang'] = $_GET['lang'];
 
-        if(isset($_SESSION['lang']) && $_SESSION['lang'] != $_GET['lang']){
-            echo "<script type='text/javascript'> location.reload(); </script>";
-        }
+    if(isset($_SESSION['lang']) && $_SESSION['lang'] != $_GET['lang']){
+
+        echo "<script type='text/javascript'> location.reload(); </script>";
     }
 
-    if(isset($_SESSION['lang'])){
-        include "includes/languages/" . $_SESSION['lang'] . ".php";
-    }else{
-        include "includes/languages/en.php";
-    }
+
+}
+
+if(isset($_SESSION['lang'])){
+
+    include "includes/languages/".$_SESSION['lang'].".php";
+
+} else {
+
+    include "includes/languages/en.php";
+
+}
+
 
 
 
@@ -70,11 +78,11 @@
 
     <!-- Page Content -->
     <div class="container">
-    <form method="get" class="navbar-form navbar-right" action="" id="language_form">
+    <form method="get" class="navbar-form navbar-right" id="language_form">
         <div class="form-group">
-            <select name="lang" id="" class="form-control" onchange="changeLanguage()" >
-                <option value="en" <?php if(isset($_SESSION['lang']) && $_SESSION['lang'] == 'en'){ echo "selected";} ?> >English</option>
-                <option value="cs" <?php if(isset($_SESSION['lang']) && $_SESSION['lang'] == 'cs'){ echo "selected";} ?> >Simplified Chinese</option>
+            <select name="lang" class="form-control" onchange="changeLanguage()" >
+                <option value="en" <?php if(isset($_SESSION['lang']) && $_SESSION['lang'] == 'en'){ echo "selected"; }?>>English</option>
+                <option value="cs" <?php if(isset($_SESSION['lang']) && $_SESSION['lang'] == 'cs'){ echo "selected"; }?>>Chinese</option>
             </select>
         </div>
     </form>
@@ -107,7 +115,7 @@
                             <p><?php echo isset($error['password']) ? $error['password'] : '';?></p>
                         </div>
 
-                        <input type="submit" name="register" id="btn-login" class="btn btn-custom btn-lg btn-block" value="<?php echo _REGISTER;?>">
+                        <input type="submit" name="register" id="btn-login" class="btn btn-primary btn-lg btn-block" value="<?php echo _REGISTER;?>">
                     </form>
 
                 </div>
@@ -120,7 +128,7 @@
         <hr>
 <script>
     function changeLanguage(){
-        document.getElementById("language_form").submit();
+        document.getElementById('language_form').submit();
     }
 
 </script>
